@@ -68,5 +68,4 @@ console.log(numbers.length);
 
 //
 
-const 
 
