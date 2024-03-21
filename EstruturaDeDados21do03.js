@@ -33,7 +33,7 @@ console.table(matrix3x3x3);
 
 //
 
-const zero = teste;
+const zero = 9;
 const positiveNumbers = [1, 2, 3];
 const negativeNumbers = [-3, -2, -1];
 let numbers = negativeNumbers.concat(zero, positiveNumbers);
