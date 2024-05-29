@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conjunto de Alunos</title>
+</head>
+<body>
+
+<h1>Conjunto de Alunos</h1>
+<button onclick="adicionarAluno()">Adicionar Aluno</button>
+<button onclick="removerAluno()">Remover Aluno</button>
+<button onclick="limparLista()">Limpar Lista</button>
+<div id="listaAlunos"></div>
+
+<script>
+class Aluno {
+    constructor(nome, nota, matriculaAtiva = true) {
+        this.nome = nome;
+        this.nota = nota;
+        this.matriculaAtiva = matriculaAtiva;
+    }
+
+    get status() {
+        return this.matriculaAtiva ? 'A' : 'I';
+    }
+}
+
+class ConjuntoDeAlunos {
+    constructor(limite = 40) {
+        this.itens = {};
+        this.limite = limite;
+    }
+
+    adicionar(aluno) {
+        if (this.tamanho() < this.limite) {
+            if (!this.contem(aluno.nome)) {
+                this.itens[aluno.nome] = aluno;
+                this.atualizarLista();
+                console.log(`${aluno.nome} adicionado na lista.`);
+                return true;
+            }
+            console.log("Aluno já existe na lista.");
+            return false;
+        }
+        console.log("Limite de alunos atingido.");
+        return false;
+    }
+
+    remover(nome) {
+        if (this.contem(nome)) {
+            delete this.itens[nome];
+            this.atualizarLista();
+            console.log(`${nome} removido da lista.`);
+            return true;
+        }
+        console.log("Aluno não encontrado na lista.");
+        return false;
+    }
+
+    contem(nome) {
+        return Object.prototype.hasOwnProperty.call(this.itens, nome);
+    }
+
+    limpar() {
+        this.itens = {};
+        this.atualizarLista();
+        console.log("Lista limpa.");
+    }
+
+    tamanho() {
+        return Object.keys(this.itens).length;
+    }
+
+    valores() {
+        return Object.values(this.itens);
+    }
+
+    ordenarPorNotaDescrescente() {
+        return this.valores().sort((a, b) => b.nota - a.nota);
+    }
+
+    atualizarLista() {
+        const listaOrdenada = this.ordenarPorNotaDescrescente();
+        const listaAlunos = document.getElementById("listaAlunos");
+        listaAlunos.innerHTML = "";
+        listaOrdenada.forEach((aluno, index) => {
+            const linha = document.createElement("div");
+            linha.textContent = `${index + 1}. ${aluno.nome} - Nota: ${aluno.nota.toFixed(1)} - Status: ${aluno.status}`;
+            listaAlunos.appendChild(linha);
+        });
+    }
+}
+
+const conjuntoDeAlunos = new ConjuntoDeAlunos();
+
+function adicionarAluno() {
+    const nome = prompt("Digite o nome do aluno:");
+    const nota = parseFloat(prompt("Digite a nota do aluno:"));
+    conjuntoDeAlunos.adicionar(new Aluno(nome, nota));
+}
+
+function removerAluno() {
+    const nome = prompt("Digite o nome do aluno que deseja remover:");
+    conjuntoDeAlunos.remover(nome);
+}
+
+function limparLista() {
+    conjuntoDeAlunos.limpar();
+}
+</script>
+
+</body>
+</html>
